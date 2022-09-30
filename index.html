@@ -1,0 +1,44 @@
+<html>
+<head>
+</head>
+<body>
+  <a href="https://discord.com/api/oauth2/authorize?client_id=1025493075243585587&redirect_uri=http%3A%2F%2Flocalhost%3A55555&response_type=token&scope=guilds%20identify"><button>Login with Discord</button></a>
+  <div id="info"></div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    //Retrieve oauth token
+    window.onload = () => {
+      const fragment = new URLSearchParams(window.location.hash.slice(1));
+      const [accessToken, tokenType] = [fragment.get('access_token'), fragment.get('token_type')];
+      
+      if (!accessToken) {
+        // Prompt for login
+        console.log('No access token');
+        return;
+      }
+      
+      // Remove fragment from URL
+      parent.location.hash = '';
+      
+      console.log(`${tokenType}: ${accessToken}`);
+      fetch('https://discord.com/api/users/@me/guilds', {
+        headers: {
+          authorization: `${tokenType} ${accessToken}`,
+        },
+      })
+        .then(result => result.json())
+        .then(response => {
+          for (var guild of response) {
+            console.log(guild);
+            const { id, name, permissions } = guild;
+            // All guilds with manage server permissions
+            if (permissions & 32) {
+              document.getElementById('info').innerText += ` ${id}: ${name}\n`;
+            }
+          }
+        })
+        .catch(console.error);
+    };
+  </script>
+</body>
+</html>
