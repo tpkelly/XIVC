@@ -6,6 +6,8 @@ const { port, clientId, clientSecret } = require('./config.json');
 
 const app = express();
 app.use(cookieParser());
+app.use('/css', express.static('style'));
+app.use('/img', express.static('img'));
 app.set('view engine', 'pug');
 
 app.get('/', (request, response) => {
@@ -14,23 +16,28 @@ app.get('/', (request, response) => {
     return;
   }
   
-  fetch('https://discord.com/api/users/@me/guilds', {
-      headers: {
-        authorization: `${request.cookies['tokenType']} ${request.cookies['oauth']}`,
-      },
-    })
+  var authHeader = { headers:
+    {
+      authorization: `${request.cookies['tokenType']} ${request.cookies['oauth']}`,
+    }
+  };
+  
+  fetch('https://discord.com/api/users/@me', authHeader)
     .then(result => result.json())
-    .then(res => {
-      var servers = res.reduce((output, guild) => {
-        // Only look for guilds with "Manage Server" permission
-        if (guild.permissions & 32) {
-          output.push(`${guild.id}: ${guild.name}`);
-        }
-        
-        return output;
-      }, []);
-      
-      response.render('index', { loggedin: true, servers: servers })
+    .then(user => {
+      fetch('https://discord.com/api/users/@me/guilds', authHeader)
+          .then(result => result.json())
+          .then(guilds => {
+            var servers = guilds.reduce((output, guild) => {
+              // Only look for guilds with "Manage Server" permission
+              if (guild.permissions & 32) {
+                output.push({id: guild.id, name: guild.name, icon: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` });
+              }
+              
+              return output;
+            }, []);
+            response.render('index', { loggedin: true, servers: servers, profile: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`})
+      });
     })
     .catch(console.error);
 });

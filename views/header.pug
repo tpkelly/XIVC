@@ -1,0 +1,10 @@
+mixin header(loggedin, profile)
+  div#header
+    img#logo(src="img/logo.png")
+    span
+      if (loggedin)
+        a(href="/profile")
+          img#profile(src=profile)
+      else
+        a(href="https://discord.com/api/oauth2/authorize?client_id=1025493075243585587&redirect_uri=http%3A%2F%2Flocalhost%3A55555%2Flogin&response_type=code&scope=guilds%20identify")
+          button.login 💫 Login with Discord

@@ -1,10 +1,14 @@
+include ./header.pug
+include ./servercard.pug
+
 doctype html
 html
+  head
+    link(rel='stylesheet', href='/css/style.css')
   body
+    +header(loggedin, profile)
     if (loggedin)
-      div
-        each server in servers
-          div #{server}
-    else
-      a(href="https://discord.com/api/oauth2/authorize?client_id=1025493075243585587&redirect_uri=http%3A%2F%2Flocalhost%3A55555%2Flogin&response_type=code&scope=guilds%20identify")
-        button Login with Discord
+      div#content
+        div#servers
+          each server in servers
+            +card(server)
