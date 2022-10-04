@@ -12,31 +12,46 @@ app.set('view engine', 'pug');
 
 app.get('/', (request, response) => {
   if (!request.cookies['oauth']) {
-    response.render('index', { loggedin: false })
+    response.render('index', { header: {} })
     return;
   }
   
-  var authHeader = { headers:
-    {
-      authorization: `${request.cookies['tokenType']} ${request.cookies['oauth']}`,
-    }
-  };
-  
-  fetch('https://discord.com/api/users/@me', authHeader)
-    .then(result => result.json())
-    .then(user => {
-      fetch('https://discord.com/api/users/@me/guilds', authHeader)
+  getHeaderInfo(request)
+    .then(header => {
+      var servers = [
+        { name: 'FFXIV Europe', description: 'Community dedicated to users that play on European game worlds.', memberCount: 12345, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' },
+        { name: 'Fey\'s Temperance', description: 'Fey\'s Temperance is a hub for creativity and growth.', memberCount: 23456, categories: [ 'abc', 'def' ], icon: 'img/discord.svg' },
+        { name: 'Eorzea Collection', description: 'Share your glamours and browse through collections.', memberCount: 34567, categories: [ 'def', 'ghi', 'jkl' ], icon: 'img/discord.svg' },
+        { name: 'r/ffxiv', description: 'The official r/ffxiv Discord server, formerly called Reddit FFXIV.', memberCount: 45678, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' }
+      ];
+      response.render('index', { servers: servers, header: header })
+    });  
+});
+
+app.get('/profile', (request, response) => {
+  if (!request.cookies['oauth']) {
+      response.redirect('/');
+    return;
+  }
+
+  getHeaderInfo(request)
+    .then(header => {
+      fetch('https://discord.com/api/users/@me/guilds', getAuth(request))
           .then(result => result.json())
           .then(guilds => {
             var servers = guilds.reduce((output, guild) => {
               // Only look for guilds with "Manage Server" permission
               if (guild.permissions & 32) {
-                output.push({id: guild.id, name: guild.name, icon: `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` });
+                output.push({
+                  id: guild.id,
+                  name: guild.name,
+                  icon: (guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : 'img/discord.svg'),
+                });
               }
               
               return output;
             }, []);
-            response.render('index', { loggedin: true, servers: servers, profile: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`})
+            response.render('profile', { servers: servers, header: header })
       });
     })
     .catch(console.error);
@@ -67,5 +82,27 @@ app.get('/login', (request, response) => {
     })
     .catch(console.error)
 });
+
+async function getHeaderInfo(request) {
+  if (!request.cookies['oauth']) {
+    return {};
+  }
+
+  return fetch('https://discord.com/api/users/@me', getAuth(request))
+    .then(result => result.json())
+    .then(user => {
+      return {
+        profile: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+      };
+    });
+}
+
+function getAuth(request) {
+    return { headers:
+    {
+      authorization: `${request.cookies['tokenType']} ${request.cookies['oauth']}`,
+    }
+  };
+}
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));

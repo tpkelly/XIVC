@@ -9,7 +9,6 @@ body {
   width: 800px;
   margin-left: auto;
   margin-right: auto;
-  background-color: white;
 }
 
 /* Header */
@@ -74,7 +73,7 @@ img#discord {
   padding-right: 5px;
 }
 
-/* Profile */
+/* Home */
 #servers {
   display: grid;
   column-gap: 10px;
@@ -83,9 +82,114 @@ img#discord {
   padding: 0 4px;
 }
 
-.card {
+.cardcontainer {
   border: 1px solid black;
   width: 100%;
+  border-radius: 30px;
+  position: relative;
+  background-color: #cccccc;
 }
 
+.card {
+  padding: 20px;
+  height: 100px;
+  justify-content: start;
+  display: flex;
+}
 
+.card .left {
+  width: 20%;
+  height: 100%;
+  display: inline-block;
+  text-align: center;
+  margin-right: 15px;
+}
+
+.card .right {
+  width: 75%;
+  display: inline-block;
+}
+
+.card h2 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.card #categories {
+  bottom: 10px;
+  position: absolute;
+  width: 65%;
+  text-align: center;
+  border-top: 1px solid black;
+  padding-top: 5px;
+}
+
+.card img {
+  margin-bottom: 10px;
+}
+
+/*
+.mycard h2 {
+  margin: 0;
+  max-width: 240px;
+}
+
+.mycard img {
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  border-radius: 25px;
+  background-color: grey;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+/* Profile */
+#myservers {
+  display: grid;
+  column-gap: 10px;
+  row-gap: 10px;
+  grid-template-columns: 390px 390px;
+  padding: 0 4px;
+}
+
+.mycardcontainer {
+  border: 1px solid black;
+  width: 100%;
+  border-radius: 30px;
+  position: relative;
+  background-color: white;
+}
+
+.mycard {
+  padding: 20px;
+  height: 100px;
+}
+
+.mycard h2 {
+  margin: 0;
+  max-width: 240px;
+}
+
+.mycard img {
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  border-radius: 25px;
+  background-color: grey;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+#botinvite button {
+  background-color: red;
+  height: 40px;
+  width: 100px;
+  color: white;
+  font-size: 12pt;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}

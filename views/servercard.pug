@@ -1,7 +1,22 @@
+mixin mycard(item)
+  div.mycardcontainer
+    div.mycard
+      h2 #{item.name}
+      img(src=item.icon)
+      div#botinvite
+        a(href='https://discordapp.com/oauth2/authorize?client_id=814716537109217311&permissions=268504096&scope=bot&guild_id=' + item.id)
+          button Create
+
 mixin card(item)
-  div.card 
-    span #{item.id}
-    br
-    span #{item.name}
-    br
-    img(src=item.icon)
+  div.cardcontainer
+    div.card
+      div.left
+        img(src=item.icon)
+        span 👨🏻‍🤝‍👨🏻 #{item.memberCount}
+      div.right
+        h2 #{item.name}
+        div#description #{item.description}
+        div#categories
+          each category in item.categories
+            span ##{category} 
+    
