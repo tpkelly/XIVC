@@ -12,12 +12,12 @@ mixin header(headerInfo)
             a(href="/news") News
       nav
         ul
-          if (headerInfo)
+          if (headerInfo.profile)
             li
               a(href="/profile")
                 img#profile(src=headerInfo.profile)
           else
             li
-              a.login(href="https://discord.com/api/oauth2/authorize?client_id=1025493075243585587&redirect_uri=http%3A%2F%2Flocalhost%3A55555%2Flogin&response_type=code&scope=guilds%20identify")
+              a.login(href=`https://discord.com/api/oauth2/authorize?client_id=${headerInfo.clientId}&redirect_uri=${headerInfo.redirectUrl}&response_type=code&scope=guilds%20identify`)
                 img#discord(src="img/discord.svg")
                 span Login

@@ -21,11 +21,6 @@ app.get('/', (request, response) => {
     { name: 'r/ffxiv', description: 'The official r/ffxiv Discord server, formerly called Reddit FFXIV.', memberCount: 45678, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' }
   ];
   
-  if (!request.cookies['oauth']) {
-    response.render('index', { header: undefined, servers: servers })
-    return;
-  }
-  
   getHeaderInfo(request)
     .then(header => {
       response.render('index', { servers: servers, header: header })
@@ -70,7 +65,7 @@ app.get('/login', (request, response) => {
   params.append('client_secret', clientSecret);
   params.append('grant_type', 'authorization_code');
   params.append('code', code);
-  params.append('redirect_uri', 'http://localhost:55555/login');
+  params.append('redirect_uri', `${request.protocol}://${request.headers['host']}/login`);
 
   fetch('https://discord.com/api/v10/oauth2/token', { method: 'POST', body: params, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
     .then(result => result.json())
@@ -89,14 +84,17 @@ app.get('/login', (request, response) => {
 
 async function getHeaderInfo(request) {
   if (!request.cookies['oauth']) {
-    return {};
+    return {
+      redirectUrl: encodeURIComponent(`${request.protocol}://${request.headers['host']}/login`),
+      clientId: clientId
+    };
   }
 
   return fetch('https://discord.com/api/users/@me', getAuth(request))
     .then(result => result.json())
     .then(user => {
       return {
-        profile: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+        profile: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
       };
     });
 }
