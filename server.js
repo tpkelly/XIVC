@@ -65,7 +65,7 @@ app.get('/login', (request, response) => {
   params.append('client_secret', clientSecret);
   params.append('grant_type', 'authorization_code');
   params.append('code', code);
-  params.append('redirect_uri', `${request.protocol}://${request.headers['host']}/login`);
+  params.append('redirect_uri', `https://${request.headers['host']}/login`);
 
   fetch('https://discord.com/api/v10/oauth2/token', { method: 'POST', body: params, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
     .then(result => result.json())
@@ -85,7 +85,7 @@ app.get('/login', (request, response) => {
 async function getHeaderInfo(request) {
   if (!request.cookies['oauth']) {
     return {
-      redirectUrl: encodeURIComponent(`${request.protocol}://${request.headers['host']}/login`),
+      redirectUrl: encodeURIComponent(`https://${request.headers['host']}/login`),
       clientId: clientId
     };
   }
