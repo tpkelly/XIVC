@@ -2,7 +2,10 @@ const express = require('express');
 const cookieParser = require("cookie-parser");
 const fetch = require('node-fetch');
 
-const { port, clientId, clientSecret } = require('./config.json');
+const config = require('./config.json');
+const port = process.env.xivc_port || config['port'] || 8080
+const clientId = process.env.xivc_clientId || config['clientId']
+const clientSecret = process.env.xivc_clientSecret || config['clientSecret']
 
 const app = express();
 app.use(cookieParser());
@@ -11,19 +14,20 @@ app.use('/img', express.static('img'));
 app.set('view engine', 'pug');
 
 app.get('/', (request, response) => {
+  var servers = [
+    { name: 'FFXIV Europe', description: 'Community dedicated to users that play on European game worlds.', memberCount: 12345, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' },
+    { name: 'Fey\'s Temperance', description: 'Fey\'s Temperance is a hub for creativity and growth.', memberCount: 23456, categories: [ 'abc', 'def' ], icon: 'img/discord.svg' },
+    { name: 'Eorzea Collection', description: 'Share your glamours and browse through collections.', memberCount: 34567, categories: [ 'def', 'ghi', 'jkl' ], icon: 'img/discord.svg' },
+    { name: 'r/ffxiv', description: 'The official r/ffxiv Discord server, formerly called Reddit FFXIV.', memberCount: 45678, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' }
+  ];
+  
   if (!request.cookies['oauth']) {
-    response.render('index', { header: {} })
+    response.render('index', { header: {}, servers: servers })
     return;
   }
   
   getHeaderInfo(request)
     .then(header => {
-      var servers = [
-        { name: 'FFXIV Europe', description: 'Community dedicated to users that play on European game worlds.', memberCount: 12345, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' },
-        { name: 'Fey\'s Temperance', description: 'Fey\'s Temperance is a hub for creativity and growth.', memberCount: 23456, categories: [ 'abc', 'def' ], icon: 'img/discord.svg' },
-        { name: 'Eorzea Collection', description: 'Share your glamours and browse through collections.', memberCount: 34567, categories: [ 'def', 'ghi', 'jkl' ], icon: 'img/discord.svg' },
-        { name: 'r/ffxiv', description: 'The official r/ffxiv Discord server, formerly called Reddit FFXIV.', memberCount: 45678, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' }
-      ];
       response.render('index', { servers: servers, header: header })
     });  
 });
