@@ -22,7 +22,7 @@ app.get('/', (request, response) => {
   ];
   
   if (!request.cookies['oauth']) {
-    response.render('index', { header: {}, servers: servers })
+    response.render('index', { header: undefined, servers: servers })
     return;
   }
   
