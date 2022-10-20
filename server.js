@@ -27,6 +27,10 @@ app.get('/', (request, response) => {
     });  
 });
 
+app.get('/status', (request, response) => {
+  return response.json({ healthy: true });
+});
+
 app.get('/profile', (request, response) => {
   if (!request.cookies['oauth']) {
       response.redirect('/');
