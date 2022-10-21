@@ -46,6 +46,13 @@ jobs:
         with:
           name: node-app
 
+      - name: Set environment secrets
+        uses: golang-enthusiast/app-yaml-env-compiler@v1.0
+        env:
+          ENV_CLIENT_ID: ${{ secrets.ENV_CLIENT_ID }}
+          ENV_CLIENT_SECRET: ${{ secrets.ENV_CLIENT_SECRET }}
+          ENV_PORT: ${{ secrets.ENV_PORT }}
+
       - name: 'Deploy to Google Cloud'
         id: deploy-to-webapp
         uses: google-github-actions/deploy-appengine@main

@@ -1,1 +1,6 @@
 runtime: nodejs16
+
+env_variables:
+  xivc_clientId: $ENV_CLIENT_ID
+  xivc_clientSecret: $ENV_CLIENT_SECRET
+  xivc_port: $ENV_PORT

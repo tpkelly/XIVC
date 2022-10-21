@@ -2,10 +2,9 @@ const express = require('express');
 const cookieParser = require("cookie-parser");
 const fetch = require('node-fetch');
 
-const config = require('./config.json');
-const port = process.env.xivc_port || config['port'] || 8080
-const clientId = process.env.xivc_clientId || config['clientId']
-const clientSecret = process.env.xivc_clientSecret || config['clientSecret']
+const port = process.env.xivc_port || 8080
+const clientId = process.env.xivc_clientId
+const clientSecret = process.env.xivc_clientSecret
 
 const app = express();
 app.use(cookieParser());
