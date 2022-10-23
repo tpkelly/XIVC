@@ -4,3 +4,8 @@ env_variables:
   xivc_clientId: $ENV_CLIENT_ID
   xivc_clientSecret: $ENV_CLIENT_SECRET
   xivc_port: $ENV_PORT
+  xivc_firebase_key_id: $ENV_FIREBASE_KEY_ID
+  xivc_firebase_key: $ENV_FIREBASE_KEY
+  xivc_firebase_client_email: $ENV_FIREBASE_EMAIL
+  xivc_firebase_client_id: $ENV_FIREBASE_CLIENT_ID
+  xivc_firebase_cert_url: $ENV_FIREBASE_CERT_URL

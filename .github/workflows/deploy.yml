@@ -52,6 +52,11 @@ jobs:
           ENV_CLIENT_ID: ${{ secrets.ENV_CLIENT_ID }}
           ENV_CLIENT_SECRET: ${{ secrets.ENV_CLIENT_SECRET }}
           ENV_PORT: ${{ secrets.ENV_PORT }}
+          ENV_FIREBASE_KEY_ID: ${{ secrets.ENV_FIREBASE_KEY_ID }}
+          ENV_FIREBASE_KEY: ${{ secrets.ENV_FIREBASE_KEY }}
+          ENV_FIREBASE_EMAIL: ${{ secrets.ENV_FIREBASE_EMAIL }}
+          ENV_FIREBASE_CLIENT_ID: ${{ secrets.ENV_FIREBASE_CLIENT_ID }}
+          ENV_FIREBASE_CERT_URL: ${{ secrets.ENV_FIREBASE_CERT_URL }}
 
       - name: 'Deploy to Google Cloud'
         id: deploy-to-webapp

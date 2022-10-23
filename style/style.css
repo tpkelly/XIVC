@@ -92,7 +92,7 @@ img#discord {
 
 .card {
   padding: 20px;
-  height: 100px;
+  height: 120px;
   justify-content: start;
   display: flex;
 }
@@ -103,6 +103,7 @@ img#discord {
   display: inline-block;
   text-align: center;
   margin-right: 15px;
+  padding-right: 15px;
 }
 
 .card .right {
@@ -126,6 +127,8 @@ img#discord {
 
 .card img {
   margin-bottom: 10px;
+  width: 90px;
+  height: 90px;
 }
 
 /*

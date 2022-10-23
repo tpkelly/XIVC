@@ -1,10 +1,30 @@
 const express = require('express');
 const cookieParser = require("cookie-parser");
 const fetch = require('node-fetch');
+const admin = require('firebase-admin');
 
 const port = process.env.xivc_port || 8080
 const clientId = process.env.xivc_clientId
 const clientSecret = process.env.xivc_clientSecret
+const botSecret = process.env.xivc_apiToken
+
+const firebase = {
+  type: "service_account",
+  project_id: "xivc-db",
+  private_key_id: process.env.xivc_firebase_key_id,
+  private_key: process.env.xivc_firebase_key.replaceAll('\\n', '\n'),
+  client_email: process.env.xivc_firebase_client_email,
+  client_id: process.env.xivc_firebase_client_id,
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url: process.env.xivc_firebase_cert_url
+};
+admin.initializeApp({
+  credential: admin.credential.cert(firebase)
+});
+
+const db = admin.firestore();
 
 const app = express();
 app.use(cookieParser());
@@ -13,17 +33,27 @@ app.use('/img', express.static('img'));
 app.set('view engine', 'pug');
 
 app.get('/', (request, response) => {
-  var servers = [
-    { name: 'FFXIV Europe', description: 'Community dedicated to users that play on European game worlds.', memberCount: 12345, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' },
-    { name: 'Fey\'s Temperance', description: 'Fey\'s Temperance is a hub for creativity and growth.', memberCount: 23456, categories: [ 'abc', 'def' ], icon: 'img/discord.svg' },
-    { name: 'Eorzea Collection', description: 'Share your glamours and browse through collections.', memberCount: 34567, categories: [ 'def', 'ghi', 'jkl' ], icon: 'img/discord.svg' },
-    { name: 'r/ffxiv', description: 'The official r/ffxiv Discord server, formerly called Reddit FFXIV.', memberCount: 45678, categories: [ 'abc', 'def', 'ghi' ], icon: 'img/discord.svg' }
-  ];
-  
-  getHeaderInfo(request)
-    .then(header => {
-      response.render('index', { servers: servers, header: header })
-    });  
+  db.collection('meta').listDocuments()
+    .then(async docs => {
+      var servers = [];
+      for (const doc of docs) {
+        await doc.get().then(d => {
+          servers.push({
+            id: d.get('id'),
+            name: d.get('name'),
+            icon: d.get('icon') || 'img/discord.svg',
+            memberCount: d.get('memberCount'),
+            description: d.get('description'),
+            categories: ['abc', 'def']
+          });
+        });
+      }
+     
+      getHeaderInfo(request)
+        .then(header => {
+          response.render('index', { servers: servers, header: header })
+        });
+    })
 });
 
 app.get('/status', (request, response) => {
