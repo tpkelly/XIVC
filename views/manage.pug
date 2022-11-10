@@ -1,0 +1,14 @@
+include ./header.pug
+include ./servercard.pug
+
+doctype html
+html
+  head
+    link(rel='stylesheet', href='/css/style.css')
+  body
+    div#content
+      span #{server.name}
+      span #{server.description}
+      span #{server.memberCount}
+      img#server(src=server.icon)
+    +header(header) // Always display last
