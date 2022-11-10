@@ -113,7 +113,7 @@ app.get('/profile', (request, response) => {
 
 app.get('/login', (request, response) => {
   var code = request.query.code
-  response.cookie('code', code);
+  response.cookie('code', code, { httpOnly: true, secure: true });
   
   const params = new URLSearchParams();
   params.append('client_id', clientId);
@@ -126,8 +126,8 @@ app.get('/login', (request, response) => {
     .then(result => result.json())
     .then(res => {
       if (res.access_token) {
-          response.cookie('oauth', res.access_token, { expire: Date.now() + res.expires_in });
-          response.cookie('tokenType', res.token_type, { expire: Date.now() + res.expires_in });
+          response.cookie('oauth', res.access_token, { maxAge: res.expires_in, httpOnly: true, secure: true });
+          response.cookie('tokenType', res.token_type, { maxAge: res.expires_in, httpOnly: true, secure: true });
       }
       else {
         console.log(res)
