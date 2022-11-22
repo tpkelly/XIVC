@@ -18,12 +18,14 @@ html
             input(type='text', name='description', value=server.description)
             br
             span Categories:
-            input(type='text', name='categories', value=server.categories.join(','))
             br
+            each category in ['Free Company', 'Events', 'Social', 'High-end Duties', 'Roleplay', 'Guides', 'Music', 'Crafting/Gathering', 'PVP']
+              input(type='checkbox', name='categories', value=category checked=server.categories.includes(category))
+              | #{category}
+              br
             span Primary Language:
             select(name='language')
-              option(value='en-GB') English
-              option(value='fr-FR') French
-              option(value='de-DE') German
+              each language in ['English', 'French', 'German']
+                option(value=language selected=language==server.language) #{language}
           input(value='Update', type='submit')
     +header(header) // Always display last

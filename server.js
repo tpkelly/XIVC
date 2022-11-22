@@ -194,7 +194,7 @@ app.post('/manage/:serverId', (request, response) => {
       serverDocRef.update({
         description: body.description,
         language: body.language,
-        categories: body.categories ? body.categories.split(',') : [] });
+        categories: body.categories || [] });
     });
   
   response.redirect('#');
