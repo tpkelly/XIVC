@@ -7,8 +7,23 @@ html
     link(rel='stylesheet', href='/css/style.css')
   body
     div#content
-      span #{server.name}
-      span #{server.description}
-      span #{server.memberCount}
-      img#server(src=server.icon)
+      div#manageServer
+        div#summary
+          img#server(src=server.icon)
+          h2 #{server.name}
+        span #{server.memberCount} members
+        form(action='/manage/' + server.id, method='POST')
+          p
+            span Description:
+            input(type='text', name='description', value=server.description)
+            br
+            span Categories:
+            input(type='text', name='categories', value=server.categories.join(','))
+            br
+            span Primary Language:
+            select(name='language')
+              option(value='en-GB') English
+              option(value='fr-FR') French
+              option(value='de-DE') German
+          input(value='Update', type='submit')
     +header(header) // Always display last

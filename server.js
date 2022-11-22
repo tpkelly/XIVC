@@ -1,5 +1,6 @@
 const express = require('express');
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
 const admin = require('firebase-admin');
 
@@ -28,6 +29,8 @@ const db = admin.firestore();
 
 const app = express();
 app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/css', express.static('style'));
 app.use('/img', express.static('img'));
 app.set('view engine', 'pug');
@@ -44,7 +47,7 @@ app.get('/', (request, response) => {
             icon: d.get('icon') || 'img/discord.svg',
             memberCount: d.get('memberCount'),
             description: d.get('description'),
-            categories: ['abc', 'def']
+            categories: d.get('categories') || []
           });
         });
       }
@@ -166,12 +169,35 @@ app.get('/manage/:serverId', (request, response) => {
                   return response.status(404).send('404 Not Found');
                 }
                 
-                console.log(doc.data());
                 response.render('manage', { server: doc.data(), header: header });
               });
       });
     })
     .catch(console.error);
+});
+
+app.post('/manage/:serverId', (request, response) => {
+  if (!request.cookies['oauth']) {
+      response.redirect('/');
+    return;
+  }
+  
+  var body = request.body;
+  var serverId = request.params.serverId;
+  var serverDocRef = db.collection('meta').doc(serverId);
+  serverDocRef.get()
+    .then(doc => {
+      if (!doc.exists) {
+        return;
+      }
+      
+      serverDocRef.update({
+        description: body.description,
+        language: body.language,
+        categories: body.categories ? body.categories.split(',') : [] });
+    });
+  
+  response.redirect('#');
 });
 
 async function getHeaderInfo(request) {

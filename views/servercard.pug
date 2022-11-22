@@ -21,6 +21,10 @@ mixin card(item)
         h2 #{item.name}
         div#description #{item.description}
         div#categories
-          each category in item.categories || []
-            span ##{category} 
+          if (item.categories)
+            each category in item.categories || []
+              span ##{category}
+          else
+            span &nbsp;
+          
     
