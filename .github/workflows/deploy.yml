@@ -46,6 +46,11 @@ jobs:
         with:
           name: node-app
 
+      - name: 'Authenticate with Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: ${{ secrets.gcp_credentials }}
+
       - name: Set environment secrets
         uses: golang-enthusiast/app-yaml-env-compiler@v1.0
         env:
@@ -60,6 +65,4 @@ jobs:
 
       - name: 'Deploy to Google Cloud'
         id: deploy-to-webapp
-        uses: google-github-actions/deploy-appengine@main
-        with:
-          credentials: ${{ secrets.gcp_credentials }}
+        uses: google-github-actions/deploy-appengine@v1
