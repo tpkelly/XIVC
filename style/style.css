@@ -6,9 +6,26 @@ body {
 }
 
 #content {
-  width: 800px;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media (min-width: 1200px) {
+  #content {
+    width: 1200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  #content {
+    width: 800px;
+  }
+}
+
+@media (max-width: 800px) {
+  #content {
+    width: 400px;
+  }
 }
 
 /* Header */
@@ -78,8 +95,8 @@ img#discord {
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  grid-template-columns: 390px 390px;
   padding: 0 4px;
+  grid-template-columns: repeat(auto-fill, 390px);
 }
 
 .cardcontainer {
@@ -157,7 +174,7 @@ img#discord {
   display: grid;
   column-gap: 10px;
   row-gap: 10px;
-  grid-template-columns: 390px 390px;
+  grid-template-columns: repeat(auto-fill, 390px);
   padding: 0 4px;
 }
 
