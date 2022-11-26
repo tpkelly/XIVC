@@ -2,10 +2,15 @@ const fetch = require('node-fetch');
 const clientId = process.env.xivc_clientId
 const clientSecret = process.env.xivc_clientSecret
 
+function protocol(host) {
+  return host.startsWith("localhost:") ? "http" : "https";
+}
+
 async function getHeaderInfo(request) {
   if (!request.cookies['oauth']) {
+    var host = request.headers['host'];
     return {
-      redirectUrl: encodeURIComponent(`https://${request.headers['host']}/login`),
+      redirectUrl: encodeURIComponent(`${protocol(host)}://${host}/login`),
       clientId: clientId
     };
   }
@@ -33,7 +38,7 @@ function token(host, code, response) {
   params.append('client_secret', clientSecret);
   params.append('grant_type', 'authorization_code');
   params.append('code', code);
-  params.append('redirect_uri', `https://${host}/login`);
+  params.append('redirect_uri', `${protocol(host)}://${host}/login`);
 
   return fetch('https://discord.com/api/v10/oauth2/token', { method: 'POST', body: params, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
     .then(result => result.json())

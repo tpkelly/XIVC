@@ -2,7 +2,7 @@
 body {
   margin: 0;
   margin-top: 75px;
-  background-color: grey;
+  background-color: #fff;
 }
 
 #content {
@@ -18,7 +18,7 @@ body {
   left: 0;
   right: 0;
   height: 55px;
-  background-color: purple;
+  background-color: #ff5757;
 }
 
 #header {
@@ -87,7 +87,7 @@ img#discord {
   width: 100%;
   border-radius: 30px;
   position: relative;
-  background-color: #cccccc;
+  background-color: #ffd6cc;
 }
 
 .card {
@@ -162,7 +162,7 @@ img#discord {
 }
 
 .mycardcontainer {
-  border: 1px solid black;
+  border: 1px solid #888;
   width: 100%;
   border-radius: 30px;
   position: relative;
@@ -184,14 +184,15 @@ img#discord {
   height: 90px;
   padding: 10px;
   border-radius: 25px;
-  background-color: grey;
+  background-color: #ffd6cc;
   position: absolute;
   right: 10px;
   top: 10px;
 }
 
 #botinvite button {
-  background-color: red;
+  background-color: #ff5757;
+  border-width: 0;
   height: 40px;
   width: 100px;
   color: white;
